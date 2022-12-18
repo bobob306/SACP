@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "225382976100",
+    "project_id": "sacp-57b9f",
+    "storage_bucket": "sacp-57b9f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:225382976100:android:64662809126c5b62276d71",
+        "android_client_info": {
+          "package_name": "com.benshapiro.sacp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "225382976100-k9eqjeoh9c24s0b2kfjde9aed21jgut5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD96dQha2ZBvmkwG2hXpOkFM69eNcHEKi0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "225382976100-k9eqjeoh9c24s0b2kfjde9aed21jgut5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
