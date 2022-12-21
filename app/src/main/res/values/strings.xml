@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SACP</string>
+    <string name="welcome_text">\Welcome to St Alban\'s Community Pantry, please \</string>
 </resources>

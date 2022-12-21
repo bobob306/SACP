@@ -2,6 +2,8 @@ package com.benshapiro.sacp.ui.image
 
 import android.net.Uri
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -33,7 +35,7 @@ fun SACPImage(
     imageUri: Uri? = null,
 ) {
     val contDesc = "Your uploaded image"
-    val defaultImage = R.drawable.sacp
+    val defaultImage = R.drawable.sacp_profile_pic
     if (imageUri == null) {
         Image(
                 painter = painterResource(id = image!!),
@@ -41,6 +43,19 @@ fun SACPImage(
         )
     } else {
         AsyncImage(model = imageUri, contentDescription = contDesc)
+    }
+}
+
+@Composable
+fun SACPHeaderImage(
+    image: Int = R.drawable._56_sacp_master_logo_rgb,
+    contDesc: String = "SACP Header"
+){
+    Row(modifier = Modifier
+        .padding(vertical = 12.dp)
+        .fillMaxWidth()
+    ) {
+        Image(painter = painterResource(id = image), contentDescription = contDesc)
     }
 }
 

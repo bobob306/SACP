@@ -27,12 +27,12 @@ fun SACPHeaderTextBox(
     modifier: Modifier,
 ) {
     Box(modifier = Modifier
-        .padding(start = 12.dp),
+        .padding(bottom = 12.dp),
         contentAlignment = CenterStart
     ) {
         Text(
             text = text,
-            style = typography.h4,
+            style = typography.h5,
             maxLines = 1,
             modifier = modifier,
         )
