@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
+    private val handle: SavedStateHandle,
 ) : ViewModel() {
     val result = mutableStateOf<Uri?>(null)
     var loading = mutableStateOf(true)
