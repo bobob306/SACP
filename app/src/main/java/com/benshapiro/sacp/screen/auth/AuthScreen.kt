@@ -81,7 +81,7 @@ fun AuthScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 12.dp),
-                            onValueChange = viewModel::onPasswordEntered,
+                            onValueChange = viewModel::onNewPasswordEntered,
                             keyboardOptions = remember {
                                 KeyboardOptions(
                                         capitalization = KeyboardCapitalization.None,
@@ -125,6 +125,10 @@ fun AuthScreen(
                             "Existing account",
                         onClick = { newAccountState.value = !newAccountState.value })
 
+            }
+            Row() {
+                SACPButton(buttonName = "Forgotten password",
+                           onClick = {/*TODO password reset*/})
             }
         }
     }

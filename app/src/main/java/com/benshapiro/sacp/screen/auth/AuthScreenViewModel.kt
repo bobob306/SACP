@@ -36,7 +36,7 @@ class AuthScreenViewModel @Inject constructor(
             "Enter your password"
     ))
     fun onPasswordEntered(input: String) {
-        val error = InputValidator.newPasswordErrorIdOrNull(input)
+        val error = InputValidator.passwordEnteredErrorIdOrNull(input)
         enterPassword.value.boxErrorMessage = error
     }
 }

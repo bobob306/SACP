@@ -34,4 +34,11 @@ object InputValidator {
             else -> null
         }
     }
+
+    fun passwordEnteredErrorIdOrNull(input: String) : String? {
+        return when {
+            input.isNullOrBlank() -> "Password cannot be blank"
+            else -> null
+        }
+    }
 }
