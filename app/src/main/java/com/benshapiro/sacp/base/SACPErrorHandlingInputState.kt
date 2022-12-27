@@ -13,11 +13,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.benshapiro.sacp.R
 import com.benshapiro.sacp.ui.theme.SacpGreen
+import com.benshapiro.sacp.utils.InputValidator
 import kotlinx.coroutines.flow.StateFlow
 
 class SACPErrorHandlingInputState(
@@ -206,7 +209,6 @@ fun SACPErrorHandlingUserInput2(
         }
     }
 }
-
 
 @Composable
 fun rememberSACPEditableUserInputState(

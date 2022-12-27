@@ -4,23 +4,20 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.benshapiro.sacp.base.LoadingContent
-import com.benshapiro.sacp.base.SACPErrorHandlingInputState
-import com.benshapiro.sacp.base.SACPErrorHandlingUserInput2
+import com.benshapiro.sacp.base.*
+import com.benshapiro.sacp.base.userInput.EmailInput
+import com.benshapiro.sacp.base.userInput.ExistingPasswordInput
+import com.benshapiro.sacp.base.userInput.NewPasswordInput
 import com.benshapiro.sacp.ui.button.SACPButton
 import com.benshapiro.sacp.ui.image.SACPHeaderImage
-import com.benshapiro.sacp.utils.InputValidator
 import com.benshapiro.sacp.utils.accountCreationLogic
 import com.benshapiro.sacp.utils.enabledRules.enabledRules
 import com.google.firebase.auth.FirebaseUser
@@ -126,7 +123,6 @@ fun OAuthScreen(
 //                                                "Creating account", null,
 //                                                SnackbarDuration.Short
 //                                        )
-//
 //                                    }
                             },
                             enabled = enabled
@@ -155,72 +151,5 @@ fun OAuthScreen(
             }
             makeNewAccount = !makeNewAccount
         }
-    }
-}
-
-@Composable
-fun NewPasswordInput(newPassword: SACPErrorHandlingInputState) {
-    Row() {
-        SACPErrorHandlingUserInput2(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                state = newPassword,
-                onValueChange = {
-                    newPassword.text = it
-                    val error = InputValidator.newPasswordErrorIdOrNull(
-                            newPassword.text ?: "")
-                    newPassword.boxErrorMessage = error
-                },
-                keyboardOptions = remember {
-                    KeyboardOptions(
-                            capitalization = KeyboardCapitalization.None,
-                            autoCorrect = false,
-                            keyboardType = KeyboardType.Password,
-                    )
-                },
-                password = true,
-        )
-    }
-}
-
-@Composable
-fun EmailInput(email: SACPErrorHandlingInputState) {
-    Row() {
-        SACPErrorHandlingUserInput2(
-                modifier = Modifier.fillMaxWidth(),
-                state = email,
-                onValueChange = {
-                    email.text = it
-                    val error = InputValidator.getEmailErrorIdOrNull(email.text ?: "")
-                    email.boxErrorMessage = error
-                },
-                keyboardOptions = KeyboardOptions(KeyboardCapitalization.None, false,
-                                                  KeyboardType.Email)
-        )
-    }
-}
-
-@Composable
-fun ExistingPasswordInput(existingPassword: SACPErrorHandlingInputState) {
-    Row() {
-        SACPErrorHandlingUserInput2(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                state = existingPassword,
-                onValueChange = {
-                    existingPassword.text = it
-                    val error = InputValidator.passwordEnteredErrorIdOrNull(
-                            existingPassword.text ?: "")
-                    existingPassword.boxErrorMessage = error
-                },
-                keyboardOptions = remember {
-                    KeyboardOptions(
-                            capitalization = KeyboardCapitalization.None,
-                            autoCorrect = false,
-                            keyboardType = KeyboardType.Password,
-                    )
-                },
-                password = true,
-        )
     }
 }
