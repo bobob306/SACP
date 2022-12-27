@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 fun SACPButton(
     buttonName: String,
     onClick: () -> Unit,
+    enabled: Boolean = true
 ) {
     Row(
         modifier = Modifier
@@ -25,16 +26,14 @@ fun SACPButton(
             onClick = onClick,
             interactionSource = MutableInteractionSource(),
             modifier = Modifier
-                .padding(horizontal = 16.dp)
                 .padding(bottom = 8.dp)
                 .align(Alignment.CenterVertically)
-                .width(200.dp),
-            enabled = true
+                .widthIn(min = 200.dp),
+            enabled = enabled
         ) {
             Text(
                 text = buttonName,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
             )
         }
     }

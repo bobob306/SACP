@@ -5,11 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,6 +25,7 @@ import com.benshapiro.sacp.ui.text.SACPTextBox
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.launch
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -38,13 +36,37 @@ fun AuthScreen(
     val TAG = "EmailPassword"
     val auth = Firebase.auth
     val scrollState = rememberScrollState(0)
-    var newAccountState = remember { mutableStateOf(false) }
+    var newAccountState by remember { mutableStateOf(false) }
+    val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
+    Scaffold(
+            scaffoldState = scaffoldState,
+            floatingActionButton = {
+                var clickCount by remember { mutableStateOf(0) }
+                ExtendedFloatingActionButton(
+                        text = { Text("Show snackbar") },
+                        onClick = {
+                            // show snackbar as a suspend function
+                            scope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar("Snackbar # ${++clickCount}")
+                            }
+                        }
+                )
+            },
+            content = { innerPadding ->
+                Text(
+                        text = "Body content",
+                        modifier = Modifier.padding(innerPadding).fillMaxSize().wrapContentSize()
+                )
+            }
+    )
     Surface(
             color = MaterialTheme.colors.background,
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight(),
     ) {
+        val (snackbarVisibleState, setSnackBarState) = remember { mutableStateOf(false) }
         Column(horizontalAlignment = CenterHorizontally,
                modifier = Modifier
                    .verticalScroll(scrollState)
@@ -57,7 +79,7 @@ fun AuthScreen(
                 .fillMaxWidth()
             ) {
                 SACPTextBox(text = stringResource(R.string.welcome_text) +
-                        if (newAccountState.value == false) " login" else " create an account")
+                        if (!newAccountState) " login" else " create an account")
             }
             Row() {
                 SACPErrorHandlingUserInput(
@@ -67,16 +89,16 @@ fun AuthScreen(
                         onValueChange = viewModel::onEmailEntered,
                         keyboardOptions = remember {
                             KeyboardOptions(
+                                    keyboardType = KeyboardType.Email,
                                     capitalization = KeyboardCapitalization.None,
                                     autoCorrect = false,
                             )
                         },
                         state = viewModel.emailInput,
-                        password = false
                 )
             }
             Row() {
-                if (newAccountState.value) {
+                if (newAccountState) {
                     SACPErrorHandlingUserInput(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -111,7 +133,7 @@ fun AuthScreen(
                 }
             }
             Row() {
-                if (!newAccountState.value) {
+                if (!newAccountState) {
                     SACPButton(buttonName = "Login",
                                onClick = { })//signIn("", "") })
                 } else {
@@ -121,16 +143,29 @@ fun AuthScreen(
             }
             Row() {
                 SACPButton(
-                        buttonName = if (newAccountState.value == false) "New account" else
+                        buttonName = if (!newAccountState) "New account" else
                             "Existing account",
-                        onClick = { newAccountState.value = !newAccountState.value })
+                        onClick = { newAccountState = !newAccountState })
 
             }
             Row() {
                 SACPButton(buttonName = "Forgotten password",
-                           onClick = {/*TODO password reset*/})
+                           onClick = { setSnackBarState(!snackbarVisibleState) })
             }
         }
+        if (snackbarVisibleState) {
+            Snackbar(
+
+                    action = {
+                        Button(onClick = {}) {
+                            Text("MyAction")
+                        }
+                    },
+                    modifier = Modifier.padding(8.dp)
+            ) { Text(text = "This is a snackbar!") }
+        }
+
+
     }
 
 
@@ -190,26 +225,20 @@ private fun previewAuthScreen() {
         Column(horizontalAlignment = CenterHorizontally,
                modifier = Modifier.verticalScroll(scrollState))
         {
-            Row() {
-                // add email address text entry box
+        }
+        Row() {
+            if (!newAccountState.value) {
+                SACPButton(buttonName = "Login",
+                           onClick = { })
+            } else {
+                SACPButton(buttonName = "Create account",
+                           onClick = { })
             }
-            Row() {
-                // add password text entry box
-            }
-            Row() {
-                if (!newAccountState.value) {
-                    SACPButton(buttonName = "Login",
-                               onClick = { })
-                } else {
-                    SACPButton(buttonName = "Create account",
-                               onClick = { })
-                }
-            }
-            Row() {
-                SACPButton(buttonName = "New account",
-                           onClick = { newAccountState.value = true })
+        }
+        Row() {
+            SACPButton(buttonName = "New account",
+                       onClick = { newAccountState.value = true })
 
-            }
         }
     }
 }

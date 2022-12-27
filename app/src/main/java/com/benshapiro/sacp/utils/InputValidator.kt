@@ -6,7 +6,7 @@ object InputValidator {
     const val invalidEmail = "Email address not valid"
     fun getEmailErrorIdOrNull(input: String): String? {
         return when {
-            input.isBlank() -> "Enter an email address"
+            input.isNullOrEmpty() -> "Enter an email address"
             input.length < 7 -> "Email address too short"
             !input.contains("@") -> invalidEmail
             input.substringAfter("@").length < 5 -> invalidEmail
@@ -22,6 +22,7 @@ object InputValidator {
 
     fun newPasswordErrorIdOrNull(input: String): String? {
         return when {
+            input.isNullOrBlank() -> "Password must be at least eight characters long"
             input.length < 8 -> "Password must be at least eight characters long"
             !Pattern.compile("\\p{Nd}").matcher(input).find() ->
                 "Password must contain at least one number"

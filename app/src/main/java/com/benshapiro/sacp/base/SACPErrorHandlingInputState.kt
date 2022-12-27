@@ -50,29 +50,6 @@ class SACPErrorHandlingInputState(
     }
 }
 
-@Composable
-fun rememberSACPEditableUserInputState(
-    boxName: String?,
-    hint: String,
-    errorMessage: String,
-): SACPErrorHandlingInputState =
-    rememberSaveable(hint, saver = SACPErrorHandlingInputState.Saver) {
-        // make the initial text the same as the hint text
-        SACPErrorHandlingInputState(boxName, hint, hint, errorMessage)
-    }
-
-
-@Composable
-fun rememberSACPErrorHandlingInput(
-    boxName: String?,
-    hint: String,
-    errorMessage: String,
-): SACPErrorHandlingInputState = rememberSaveable(hint, saver = SACPErrorHandlingInputState.Saver) {
-    SACPErrorHandlingInputState(boxName, hint, hint, errorMessage)
-}
-
-// TODO make new password entry version of this, such a mess otherwise
-
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun SACPErrorHandlingUserInput(
@@ -151,6 +128,107 @@ fun SACPErrorHandlingUserInput(
         }
     }
 }
+
+@SuppressLint("StateFlowValueCalledInComposition")
+@Composable
+fun SACPErrorHandlingUserInput2(
+    modifier: Modifier,
+    state: SACPErrorHandlingInputState,
+    length: Int = state.text!!.length,
+    onValueChange: (value : String) -> Unit,
+    keyboardOptions: KeyboardOptions = remember { KeyboardOptions.Default },
+    password: Boolean? = false,
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed: Boolean by interactionSource.collectIsPressedAsState()
+    if (isPressed) if (state.isHint) state.text = ""
+    var passwordVisibility: Boolean? by remember {
+        mutableStateOf(password)
+    }
+
+    Column {
+        OutlinedTextField(
+                singleLine = true,
+                interactionSource = interactionSource,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
+                value = state.text!!,
+                onValueChange = {
+                    state.text = it
+                    onValueChange(it)
+                },
+                isError = state.boxErrorMessage != null,
+                keyboardOptions = keyboardOptions,
+                placeholder = { state.text },
+                label = {
+                    Text(
+                            text = state.boxNameText ?: "",
+                            color = if (state.boxErrorMessage == null) {
+                                SacpGreen
+                            } else {
+                                Color.Red
+                            },
+                    )
+                },
+                trailingIcon = {
+                    if (password == true) {
+                        IconButton(onClick = { passwordVisibility = !passwordVisibility!! }) {
+                            Icon(
+                                    painter = painterResource(id = R.drawable.ic_baseline_visibility_24),
+                                    contentDescription = "Show password"
+                            )
+                        }
+                    } else {
+                        IconButton(onClick = { state.text = "" }) {
+                            Icon(
+                                    painter = painterResource(id = R.drawable.ic_baseline_clear_24),
+                                    contentDescription = "Clear text button"
+                            )
+                        }
+                    }
+                },
+                visualTransformation = if (passwordVisibility == true && !state.isHint) {
+                    PasswordVisualTransformation()
+                } else {
+                    VisualTransformation.None
+                }
+        )
+        if (state.boxErrorMessage != null) {
+            state.boxErrorMessage.let {
+                Text(
+                        text = state.boxErrorMessage!!,
+                        color = MaterialTheme.colors.error,
+                        style = MaterialTheme.typography.caption,
+                        modifier = Modifier.padding(start = 16.dp)
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+fun rememberSACPEditableUserInputState(
+    boxName: String?,
+    hint: String,
+    errorMessage: String,
+): SACPErrorHandlingInputState =
+    rememberSaveable(hint, saver = SACPErrorHandlingInputState.Saver) {
+        // make the initial text the same as the hint text
+        SACPErrorHandlingInputState(boxName, hint, hint, errorMessage)
+    }
+
+@Composable
+fun rememberSACPErrorHandlingInput(
+    boxName: String?,
+    hint: String,
+    errorMessage: String,
+): SACPErrorHandlingInputState = rememberSaveable(hint, saver = SACPErrorHandlingInputState.Saver) {
+    SACPErrorHandlingInputState(boxName, hint, hint, errorMessage)
+}
+
+// TODO make new password entry version of this, such a mess otherwise
 
 @Composable
 fun SACPOutlinedTextField(state: SACPErrorHandlingInputState) {
