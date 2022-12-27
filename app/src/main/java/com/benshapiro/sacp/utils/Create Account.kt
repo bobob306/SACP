@@ -18,20 +18,17 @@ fun accountCreationLogic(email: String?, password: String?, ctx: Context): Fireb
             .addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
                     Log.d("TAG", "createUserWithEmail:success")
-                    Toast.makeText(ctx, "Account created", Toast.LENGTH_SHORT)
-                        .show()
+                    showToastWithText(ctx, "Successfully created user")
                     user = auth.currentUser
                     Log.d("mega party", user?.uid ?: "null")
                 } else {
                     // If sign in fails, display a message to the user
                     when (task.exception) {
                         is FirebaseAuthUserCollisionException ->
-                            showToastWithText(ctx, "Email already exists")
+                            showToastWithText(ctx, "Account with email already exists")
                         else -> showToastWithText(ctx, "Error creating account")
                     }
                     Log.w("TAG", "createUserWithEmail:failure", task.exception)
-                    Toast.makeText(ctx, "Account creation failed",
-                                   Toast.LENGTH_SHORT).show()
                 }
             }
     return user
